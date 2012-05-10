@@ -1,0 +1,71 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.hazardousholdings</groupId>
+	<artifactId>sprockets-java</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>Sprockets</name>
+
+	<properties>
+		<guice.version>3.0</guice.version>
+		<guava.version>11.0.2</guava.version>
+		<yui.version>2.4.6</yui.version>
+		<jless.version>0.4.9</jless.version>
+		<closure.version>r1810</closure.version>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.google.inject</groupId>
+			<artifactId>guice</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.inject.extensions</groupId>
+			<artifactId>guice-servlet</artifactId>
+			<version>${guice.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.guava</groupId>
+		    <artifactId>guava</artifactId>
+		    <version>${guava.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.javascript</groupId>
+			<artifactId>closure-compiler</artifactId>
+			<version>${closure.version}</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.yahoo.platform.yui</groupId>
+		    <artifactId>yuicompressor</artifactId>
+		    <version>${yui.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.jryans.jless</groupId>
+			<artifactId>jless</artifactId>
+			<version>${jless.version}</version>
+		</dependency>
+<!-- 		<dependency>
+		    <groupId>net.contentobjects</groupId>
+		    <artifactId>jnotify</artifactId>
+		    <version>0.94</version>
+		    <scope>system</scope>
+		    <systemPath>${project.basedir}/lib/j.jar</systemPath>
+		</dependency> -->
+	</dependencies>
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	
+</project>
