@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 public class Asset {
 	private String name;
 	private String path;
+	private String urlRoot = "";
 	private final String ogPath;
 	private final String type;
 	private final String topLevelPath;
@@ -52,11 +53,33 @@ public class Asset {
 		this.path = path;
 	}
 	
+	public void setUrlRoot(String urlRoot) {
+		this.urlRoot = urlRoot;
+	}
+	
+	public String getTag() {
+		StringBuilder tagBuilder = new StringBuilder();
+		if (this.getType().equals("js")) {
+			tagBuilder.append("<script type='text/javascript' src='");
+		} else {
+			tagBuilder.append("<link rel='stylesheet' href='");
+		}
+		// TODO: support optional /
+		tagBuilder.append(urlRoot + '/' + this.getPath());
+		if (this.getType().equals("js")) {
+			tagBuilder.append("'></script>");
+		} else {
+			tagBuilder.append("' />");
+		}
+		return tagBuilder.toString();
+	}
+	
 	public void appendContent(String file, String content) {
 		this.appendContent(file, content, false);
 	}
 	
 	public void appendContent(String file, String content, boolean self) {
+		System.out.println("appending "+file+" to "+this.name);
 		if (includedFiles.contains(file)) {
 			return;
 		}

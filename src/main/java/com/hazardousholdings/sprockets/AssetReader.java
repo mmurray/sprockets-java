@@ -14,6 +14,9 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.zkoss.zuss.Zuss;
+import org.zkoss.zuss.impl.out.BuiltinResolver;
+import org.zkoss.zuss.metainfo.ZussDefinition;
 import org.mozilla.javascript.ErrorReporter;
 import org.mozilla.javascript.EvaluatorException;
 
@@ -32,7 +35,7 @@ import com.yahoo.platform.yui.compressor.CssCompressor;
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 
 /**
- * Reads and compiles files, converting less -> css in the process 
+ * Reads and compiles files, converting zuss -> css in the process 
  *
  */
 public class AssetReader {
@@ -51,22 +54,18 @@ public class AssetReader {
 
 	public String getContents(File f, boolean compiled) {
 		try {
-			String contents = Joiner.on('\n').join(Files.readLines(f, Charsets.UTF_8));
+			StringWriter contentWriter = new StringWriter();
 			String type = f.getName().substring(f.getName().lastIndexOf('.') + 1);
 			String name = f.getName().substring(0, f.getName().lastIndexOf('.'));
-			if (type.equals("less")) {
-				LessProcessor processor = new LessProcessor();
-				if (compiled) {
-					processor.setCompressionEnabled(true); // Minification is off by default
-				}
-				InputStream lessInput = Files.newInputStreamSupplier(f).getInput();
-				contents = processor.process(lessInput).toString();
-				lessInput.close(); lessInput = null;
+			
+			if (type.equals("zuss") && compiled) {
+				ZussDefinition zussDef = Zuss.parse(f, "UTF-8");
+				Zuss.translate(zussDef, contentWriter, new BuiltinResolver());
 				type = "css"; // consider it css from this point on
+			} else {
+				contentWriter.write(Joiner.on('\n').join(Files.readLines(f, Charsets.UTF_8)));
 			}
-			if (compiled) {
-			}
-			return contents;
+			return contentWriter.toString();
 		} catch (IOException e) {
 			return "";
 		}
