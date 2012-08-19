@@ -20,7 +20,7 @@ public class DirectiveProcessor {
 	private static final Pattern DIRECTIVE_PATTERN =
 		Pattern.compile("([\\W]*=\\s*(\\w+.*?)\\s([\\w\\/]+))");
 	
-	private static final ArrayList<String> SUPPORTED_TYPES = Lists.newArrayList("css","zuss","js");
+	private static final ArrayList<String> SUPPORTED_TYPES = Lists.newArrayList("css","zuss","js", "html");
 	
 	private final List<String> loadPath;
 	private final String outputPath;
@@ -91,8 +91,10 @@ public class DirectiveProcessor {
 			Asset asset = new Asset(currentAssetName, currentAssetType, topLevelFile.getName() + currentAssetName, dir.getAbsolutePath(), topLevel);
 			
 			// look for a header
+			System.out.println("BEFORE HEADER LOOK");
 			Matcher headerMatcher = HEADER_PATTERN.matcher(currentAssetContent);
 			if (headerMatcher.find()) {
+				System.out.println("~~found~~");
 				String header = headerMatcher.group();
 				// found a header, parse the directives out of it
 				Matcher directiveMatcher = DIRECTIVE_PATTERN.matcher(header);
@@ -117,7 +119,7 @@ public class DirectiveProcessor {
 					}
 				}
 			}
-			
+			System.out.println("AFTER HEADER LOOK");
 			if(!asset.selfAppended) {
 				asset.appendContent(currentAssetName, reader.getContents(dir, true), true);
 			}
@@ -132,10 +134,12 @@ public class DirectiveProcessor {
 			if (output.exists()) {
 				output.delete();
 			}
+			System.out.println("before try create new file");
 			try {
 				output.createNewFile();
 				String compiled = "";
-				if (debug && currentAssetType.equals("js")) {
+				if (debug && currentAssetType.equals("js") ||
+						currentAssetType.equals("html")) {
 					compiled = Joiner.on('\n').join(asset.getContents());
 				} else {
 					compiled = compiler.compile(asset.getContents(), currentAssetType);
@@ -144,6 +148,7 @@ public class DirectiveProcessor {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
+			System.out.println("returning asset...");
 			return asset;
 		}
 		return null;

@@ -69,13 +69,20 @@ public class SprocketsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
+		System.out.println("SPROCKETS CONFIG!!");
+		System.out.println("SPROCKETS CONFIG!!");
+		System.out.println("SPROCKETS CONFIG!!");
+		System.out.println("SPROCKETS CONFIG!!");
 		configureSprockets();
 		if (outputPath == null) {
-			throw new RuntimeException("Must configure an output path.");
+			outputPath = "src/main/webapp";
+//			throw new RuntimeException("Must configure an output path.");
 		}
 		if (loadPath.size() < 1) {
-			throw new RuntimeException(
-					"Must configure at least one input path.");
+			loadPath.add("src/main/javascript");
+			loadPath.add("src/main/css");
+//			throw new RuntimeException(
+//					"Must configure at least one input path.");
 		}
 		processor = new DirectiveProcessor(loadPath, outputPath, debug);
 		if (externsPath != null) {
@@ -185,9 +192,9 @@ public class SprocketsModule extends AbstractModule {
 		private Asset asset;
 		final String urlRoot;
 		final DirectiveProcessor processor;
-		
+
 		private String tag;
-		
+
 		AssetProvider(String urlRoot,
 				Asset asset,
 				DirectiveProcessor processor) {
