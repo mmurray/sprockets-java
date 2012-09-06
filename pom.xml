@@ -86,5 +86,21 @@
 		</plugins>
 		
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>hh</id>
+			<name>Hazardous Holdings Public Repository</name>
+			<url>http://fire.hazardousholdings.com/archiva/repository/hh/</url>
+		</repository>
+	</distributionManagement>
+
+	<repositories>
+		<repository>
+			<id>hh</id>
+			<name>Hazardous Holdings Public Repository</name>
+			<url>http://fire.hazardousholdings.com/archiva/repository/hh/</url>
+		</repository>
+	</repositories>
 	
 </project>
