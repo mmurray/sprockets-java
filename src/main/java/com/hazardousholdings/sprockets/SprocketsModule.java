@@ -1,31 +1,16 @@
 package com.hazardousholdings.sprockets;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardWatchEventKinds;
-import java.nio.file.WatchEvent;
-import java.nio.file.WatchKey;
-import java.nio.file.WatchService;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.Callable;
-import java.util.concurrent.Future;
-
 import com.google.common.base.Preconditions;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.google.inject.AbstractModule;
-import com.google.inject.Binder;
-import com.google.inject.Module;
-import com.google.inject.Provider;
-import com.google.inject.Singleton;
-import com.google.inject.TypeLiteral;
-import com.google.inject.servlet.RequestScoped;
+import com.google.inject.*;
 import com.hazardousholdings.sprockets.annotations.AssetProviders;
+
+import java.io.File;
+import java.nio.file.*;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Future;
 
 public class SprocketsModule extends AbstractModule {
 
