@@ -54,10 +54,6 @@ public class SprocketsModule extends AbstractModule {
 
 	@Override
 	protected void configure() {
-		System.out.println("SPROCKETS CONFIG!!");
-		System.out.println("SPROCKETS CONFIG!!");
-		System.out.println("SPROCKETS CONFIG!!");
-		System.out.println("SPROCKETS CONFIG!!");
 		configureSprockets();
 		if (outputPath == null) {
 			outputPath = "src/main/webapp";
@@ -132,9 +128,7 @@ public class SprocketsModule extends AbstractModule {
 						List<WatchEvent<?>> events = watchKey.pollEvents();
 						for (WatchEvent<?> event : events) {
 							if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
-//								processor.processFolder(topLevelPath.toFile(), topLevelPath.toFile().getAbsolutePath());
 								System.out.println("## detected change to: "+event.context());
-//								System.out.println("## rebuilding: "+topLevelPath.toFile().getAbsolutePath());
 								processor.process();
 								System.out.println("## processed!");
 							}
@@ -165,7 +159,6 @@ public class SprocketsModule extends AbstractModule {
 		}
 
 		public void configure(Binder binder) {
-			System.out.println("#### binding: " + asset.getName());
 			binder.bind(String.class)
 				.annotatedWith(asset.getType().equals("js") ? new JsBundleImpl(asset) : new CssBundleImpl(asset))
 				.toProvider(new AssetProvider(urlRoot, asset, processor));
@@ -189,7 +182,6 @@ public class SprocketsModule extends AbstractModule {
 		}
 
 		public String get() {
-			System.out.println("#### get asset?" + asset.getName());
 			if (tag == null) {
 				tag = asset.getTag();
 			}

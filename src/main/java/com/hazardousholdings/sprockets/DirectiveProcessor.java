@@ -91,10 +91,8 @@ public class DirectiveProcessor {
 			Asset asset = new Asset(currentAssetName, currentAssetType, topLevelFile.getName() + currentAssetName, dir.getAbsolutePath(), topLevel);
 			
 			// look for a header
-			System.out.println("BEFORE HEADER LOOK");
 			Matcher headerMatcher = HEADER_PATTERN.matcher(currentAssetContent);
 			if (headerMatcher.find()) {
-				System.out.println("~~found~~");
 				String header = headerMatcher.group();
 				// found a header, parse the directives out of it
 				Matcher directiveMatcher = DIRECTIVE_PATTERN.matcher(header);
@@ -106,7 +104,6 @@ public class DirectiveProcessor {
 					} else if (directive.equals("include")) {
 						asset.includeContent(require(argument, currentAssetType));
 					} else if (directive.equals("require_self")) {
-						System.out.println("### REQUIRE_SELF "+currentAssetName);
 						asset.appendContent(argument, reader.getContents(dir, true), true);
 					} else if (directive.equals("require_directory")) {
 						// TODO: require_directory
@@ -119,7 +116,7 @@ public class DirectiveProcessor {
 					}
 				}
 			}
-			System.out.println("AFTER HEADER LOOK");
+
 			if(!asset.selfAppended) {
 				asset.appendContent(currentAssetName, reader.getContents(dir, true), true);
 			}
@@ -134,7 +131,7 @@ public class DirectiveProcessor {
 			if (output.exists()) {
 				output.delete();
 			}
-			System.out.println("before try create new file");
+
 			try {
 				output.createNewFile();
 				String compiled = "";
@@ -148,7 +145,7 @@ public class DirectiveProcessor {
 			} catch (IOException e) {
 				throw new RuntimeException(e);
 			}
-			System.out.println("returning asset...");
+
 			return asset;
 		}
 		return null;
