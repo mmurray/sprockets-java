@@ -27,12 +27,14 @@ public class DirectiveProcessor {
 	private final AssetReader reader;
 	private final AssetCompiler compiler;
 	private final boolean debug;
+	private final boolean skipCompile;
 	private File currentTopLevelFile;
 	private String currentTopLevelPath;	
 	
-	public DirectiveProcessor(List<String> loadPath, String outputPath, boolean debug) {
+	public DirectiveProcessor(List<String> loadPath, String outputPath, boolean debug, boolean skipCompile) {
 		this.loadPath = loadPath;
 		this.outputPath = outputPath;
+		this.skipCompile = skipCompile;
 		this.reader = new AssetReader(loadPath);
 		this.compiler = new AssetCompiler();
 		this.debug = debug;
@@ -126,6 +128,11 @@ public class DirectiveProcessor {
 			}
 			asset.setName(currentAssetName);
 			asset.setPath(topLevelFile.getName() + currentAssetName);
+			
+			if (skipCompile) {
+				return asset;
+			}
+			
 			File output = new File(outputPath + '/' + asset.getPath());
 			output.mkdirs();
 			if (output.exists()) {

@@ -22,6 +22,7 @@ public class SprocketsModule extends AbstractModule {
 	private boolean liveCompilation = true;
 	private boolean debug = false;
 	private boolean compiling = false;
+	private boolean skipCompile = false;
 	private Future<List<Asset>> compileFuture;
 	private WatchService watchService;
 
@@ -51,6 +52,10 @@ public class SprocketsModule extends AbstractModule {
 	protected void setLiveCompilation(boolean live) {
 		liveCompilation = live;
 	}
+	
+	protected void setSkipCompile(boolean skip) {
+		skipCompile = skip;
+	}
 
 	@Override
 	protected void configure() {
@@ -65,7 +70,7 @@ public class SprocketsModule extends AbstractModule {
 //			throw new RuntimeException(
 //					"Must configure at least one input path.");
 		}
-		processor = new DirectiveProcessor(loadPath, outputPath, debug);
+		processor = new DirectiveProcessor(loadPath, outputPath, debug, skipCompile);
 		if (externsPath != null) {
 			processor.setExternsPath(externsPath);
 		}
