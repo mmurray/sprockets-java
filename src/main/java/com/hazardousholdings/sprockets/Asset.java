@@ -79,7 +79,6 @@ public class Asset {
 	}
 	
 	public void appendContent(String file, String content, boolean self) {
-		System.out.println("appending "+file+" to "+this.name);
 		if (includedFiles.contains(file)) {
 			return;
 		}

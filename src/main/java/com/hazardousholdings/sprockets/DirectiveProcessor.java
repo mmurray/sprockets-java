@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang.StringEscapeUtils;
+
 import com.google.common.base.Charsets;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
@@ -18,9 +20,9 @@ public class DirectiveProcessor {
 		Pattern.compile("^\\/\\*(.*)\\*\\/", Pattern.DOTALL);
 	
 	private static final Pattern DIRECTIVE_PATTERN =
-		Pattern.compile("([\\W]*=\\s*(\\w+.*?)\\s([\\w\\/]+))");
+		Pattern.compile("([\\W]*=\\s*(\\w+.*?)\\s([\\w\\/\\-\\.]+))");
 	
-	private static final ArrayList<String> SUPPORTED_TYPES = Lists.newArrayList("css","zuss","js", "html");
+	private static final ArrayList<String> SUPPORTED_TYPES = Lists.newArrayList("css","zuss","js", "html", "mustache");
 	
 	private final List<String> loadPath;
 	private final String outputPath;
@@ -32,6 +34,8 @@ public class DirectiveProcessor {
 	private String currentTopLevelPath;	
 	
 	public DirectiveProcessor(List<String> loadPath, String outputPath, boolean debug, boolean skipCompile) {
+		System.out.println("loadPath");
+		System.out.println(loadPath);
 		this.loadPath = loadPath;
 		this.outputPath = outputPath;
 		this.skipCompile = skipCompile;
@@ -115,6 +119,8 @@ public class DirectiveProcessor {
 						// TODO: depend_on
 					} else if (directive.equals("stub")) {
 						// TODO: stub
+					} else if (directive.equals("require_html")) {
+						asset.appendContent(argument, requireHtml(argument));
 					}
 				}
 			}
@@ -138,7 +144,7 @@ public class DirectiveProcessor {
 			if (output.exists()) {
 				output.delete();
 			}
-
+System.out.println("CURRENT ASSET TYPE = "+currentAssetType);
 			try {
 				output.createNewFile();
 				String compiled = "";
@@ -172,6 +178,25 @@ public class DirectiveProcessor {
 		}
 		
 		return reader.getContents(file);
+	}
+	
+	private String requireHtml(String name) {
+		File file = null;
+		for (String path : loadPath) {
+			file = new File(path + '/' + name + ".html.mustache");
+			if (file.exists()) {
+				break;
+			}
+		}
+		if (file == null || !file.exists()) {
+			return "";
+		}
+		
+		String contents = reader.getContents(file);
+		contents = contents.replace("{{<application/shell.html}}", "");
+		contents = contents.replace("{{/application/shell.html}}", "");
+		contents = StringEscapeUtils.escapeJavaScript(contents);
+		return "lp.templates[\""+name+".html\"] = Hogan.compile(\""+contents+"\");";
 	}
 
 }

@@ -126,10 +126,8 @@ public class SprocketsModule extends AbstractModule {
 			public void run() {
 				try {
 					Path topLevelPath = Paths.get(f.getAbsolutePath());
-					topLevelPath.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
-					WatchKey watchKey = null;
+					WatchKey watchKey = topLevelPath.register(watchService, StandardWatchEventKinds.ENTRY_MODIFY);
 					while(true) {
-						watchKey = watchService.take();
 						List<WatchEvent<?>> events = watchKey.pollEvents();
 						for (WatchEvent<?> event : events) {
 							if (event.kind() == StandardWatchEventKinds.ENTRY_MODIFY) {
